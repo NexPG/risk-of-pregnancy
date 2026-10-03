@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_1" targetNamespace="http://bpmn.io/schema/bpmn">
+  <bpmn:process id="ModelLifecycle" isExecutable="true">
+    <bpmn:startEvent id="StartEvent" name="Start">
+      <bpmn:outgoing>Flow1</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:task id="DataIngestion" name="Data Ingestion&#10;(data/Maternal Health Risk Data Set.xlsx)">
+      <bpmn:incoming>Flow1</bpmn:incoming>
+      <bpmn:outgoing>Flow2</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:task id="EDA" name="EDA &amp; Analysis&#10;(notebooks/maternal_risk_final.ipynb, code/EDA.ipynb, code/trainer.ipynb)">
+      <bpmn:incoming>Flow2</bpmn:incoming>
+      <bpmn:outgoing>Flow3</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:task id="DataCleaning" name="Data Cleaning&#10;(src/maternal_risk/data.py)">
+      <bpmn:incoming>Flow3</bpmn:incoming>
+      <bpmn:outgoing>Flow4</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:task id="Features" name="Feature Prep&#10;(src/maternal_risk/features.py)">
+      <bpmn:incoming>Flow4</bpmn:incoming>
+      <bpmn:outgoing>Flow5</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:task id="Training" name="Training&#10;(src/maternal_risk/train.py, scripts/train.py)">
+      <bpmn:incoming>Flow5</bpmn:incoming>
+      <bpmn:outgoing>Flow6</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:task id="Evaluation" name="Evaluation&#10;(src/maternal_risk/evaluate.py)">
+      <bpmn:incoming>Flow6</bpmn:incoming>
+      <bpmn:outgoing>Flow7</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:task id="Prediction" name="Prediction&#10;(src/maternal_risk/predict.py, scripts/predict.py)">
+      <bpmn:incoming>Flow6</bpmn:incoming>
+      <bpmn:outgoing>Flow8</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:task id="Testing" name="Testing&#10;(tests/test_data.py, tests/test_predict.py)">
+      <bpmn:incoming>Flow7</bpmn:incoming>
+      <bpmn:incoming>Flow8</bpmn:incoming>
+      <bpmn:outgoing>Flow9</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:task id="Documentation" name="Documentation&#10;(MODEL_CARD.md, docs/MODEL_LIFECYCLE.md, docs/model_lifecycle.bpmn)">
+      <bpmn:incoming>Flow9</bpmn:incoming>
+      <bpmn:outgoing>Flow10</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:task id="QA" name="QA/Pre-commit&#10;(black 88, isort, flake8)">
+      <bpmn:incoming>Flow10</bpmn:incoming>
+      <bpmn:outgoing>Flow11</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:endEvent id="EndEvent" name="End">
+      <bpmn:incoming>Flow11</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow1" sourceRef="StartEvent" targetRef="DataIngestion" />
+    <bpmn:sequenceFlow id="Flow2" sourceRef="DataIngestion" targetRef="EDA" />
+    <bpmn:sequenceFlow id="Flow3" sourceRef="EDA" targetRef="DataCleaning" />
+    <bpmn:sequenceFlow id="Flow4" sourceRef="DataCleaning" targetRef="Features" />
+    <bpmn:sequenceFlow id="Flow5" sourceRef="Features" targetRef="Training" />
+    <bpmn:sequenceFlow id="Flow6" sourceRef="Training" targetRef="Evaluation" />
+    <bpmn:sequenceFlow id="Flow6b" sourceRef="Training" targetRef="Prediction" />
+    <bpmn:sequenceFlow id="Flow7" sourceRef="Evaluation" targetRef="Testing" />
+    <bpmn:sequenceFlow id="Flow8" sourceRef="Prediction" targetRef="Testing" />
+    <bpmn:sequenceFlow id="Flow9" sourceRef="Testing" targetRef="Documentation" />
+    <bpmn:sequenceFlow id="Flow10" sourceRef="Documentation" targetRef="QA" />
+    <bpmn:sequenceFlow id="Flow11" sourceRef="QA" targetRef="EndEvent" />
+  </bpmn:process>
+</bpmn:definitions>

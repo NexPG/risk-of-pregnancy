@@ -1,0 +1,39 @@
+[tool.poetry]
+name = "maternal_risk"
+version = "0.1.0"
+description = "Maternal risk classification"
+authors = ["Project"]
+readme = "README.md"
+packages = [{include = "maternal_risk", from = "src"}]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+numpy = "*"
+pandas = "*"
+scikit-learn = "*"
+matplotlib = "*"
+seaborn = "*"
+scipy = "*"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^7.0"
+black = "^23.0"
+flake8 = "^6.0"
+isort = "^5.0"
+pre-commit = "^3.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.black]
+line-length = 88
+target-version = ['py310']
+
+[tool.isort]
+profile = "black"
+line_length = 88
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]
